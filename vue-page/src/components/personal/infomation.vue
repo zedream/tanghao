@@ -289,7 +289,6 @@ export default{
   methods: {
     savePersonalInfo () {
       let params = {
-        username: sessionStorage.getItem('username'),
         nick_name: this.data.nick_name,
         age: +this.data.age,
         hometown: this.data.hometown,
@@ -309,7 +308,6 @@ export default{
     },
     saveEducationInfo () {
       let params = {
-        username: sessionStorage.getItem('username'),
         education: this.data.education,
         study_years: +this.data.study_years,
         major: this.data.major,
@@ -341,7 +339,6 @@ export default{
       workYears.join(',')
       position.join(',')
       let params = {
-        username: sessionStorage.getItem('username'),
         company: company,
         work_years: workYears,
         position: position
@@ -359,7 +356,6 @@ export default{
     },
     saveProjectInfo () {
       axios.post('/api/users/project', {
-        username: sessionStorage.getItem('username'),
         project: this.projects
       })
         .then(res => {
@@ -405,7 +401,7 @@ export default{
       this.companyIdx = ''
     },
     getData () {
-      axios.get('/api/users/allInfo?username=' + sessionStorage.getItem('username') + '', {
+      axios.get('/api/users/allInfo', {
       })
         .then(res => {
           this.data = res.data.result

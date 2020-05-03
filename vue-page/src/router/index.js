@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
   // ...
   let meta = to.meta
   if (meta.isAuth === true) {
-    if (sessionStorage.getItem('username')) {
+    if (localStorage.getItem('username')) {
       next()
     } else {
       next({

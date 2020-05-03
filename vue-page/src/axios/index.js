@@ -1,26 +1,20 @@
 import axios from 'axios'
-import router from '../router/'
+import router from '@/router'
 import { Message } from 'element-ui'
-
-// var root = process.env.API_ROOT
+import { getToken } from '@/util/auth'
 
 axios.defaults.timeout = 50000
 axios.defaults.validateStatus = function (status) {
   return status >= 200 && status <= 500
 }
 // 跨域请求，允许保存cookie
-axios.defaults.withCredentials = true
-
-// axios.defaults.baseURL = 'http://th.vaiwan.com'
+// axios.defaults.withCredentials = true
 
 // http request拦截
 axios.interceptors.request.use(config => {
-  // const meta = (config.meta || {})
-  // const isToken = meta.isToken === false
-  // if (getToken() && !isToken) {
-  //   config.headers['TH-Auth'] = 'th '
-  // }
-  // config.url = root + config.url
+  if (getToken()) {
+    config.headers['TH-Auth'] = `th ${getToken()}`
+  }
   return config
 }, error => {
   return Promise.reject(error)

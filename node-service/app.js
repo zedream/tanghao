@@ -1,15 +1,17 @@
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
+let createError = require('http-errors')
+let express = require('express')
+let path = require('path')
+let cookieParser = require('cookie-parser')
+let logger = require('morgan')
+let Jwt = require('./jwt')
+let globalData = require('./util/globalData')
 
-var indexRouter = require('./routes/index')
-var loginRouter = require('./routes/login')
-var usersRouter = require('./routes/users')
-var uploadRouter = require('./routes/upload')
+let indexRouter = require('./routes/index')
+let loginRouter = require('./routes/login')
+let usersRouter = require('./routes/users')
+let uploadRouter = require('./routes/upload')
 
-var app = express();
+let app = express();
 
 app.all('*', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
@@ -29,14 +31,29 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-// app.use('/', indexRouter)
-// app.use('/login', loginRouter)
-// app.use('/users', usersRouter)
-// app.use('/upload', uploadRouter)
-app.use('/api/', indexRouter)
-app.use('/api/login', loginRouter)
-app.use('/api/users', usersRouter)
+app.use((req, res, next) => {
+  if (req.url !== '/' && req.url !== '/login' && req.url !== 'upload') {
+    let token = req.headers['th-auth'].split(' ')[1]
+    let jwt = new Jwt(token)
+    let result = jwt.verifyToken()
+    globalData.username = result
+    // 如果考验通过就next，否则就返回登陆信息不正确
+    if (result === 'err') {
+        console.log(result)
+        res.status(401).send({msg: '请求未授权，请重新登录'})
+        // res.render('login.html')
+    } else {
+      next()
+    }
+} else {
+    next()
+  }
+})
+app.use('/', indexRouter)
+app.use('/login', loginRouter)
+app.use('/users', usersRouter)
 app.use('/upload', uploadRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

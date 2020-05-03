@@ -1,5 +1,6 @@
 let express = require('express')
 let router = express.Router()
+let Jwt = require('../jwt')
 let db = require('../db')
 
 router.post('/', function(req, res, next) {
@@ -8,6 +9,9 @@ router.post('/', function(req, res, next) {
   db.query('select username, nick_name, avatar, password from user where username= "'+ username +'"', [], (result, fields) => {
     if (result.length > 0) {
       if (password === result[0].password) {
+        // 将用户id传入并生成token
+        let jwt = new Jwt(username)
+        let token = jwt.generateToken()
         let results = {
           username: result[0].username,
           nickName: result[0].nick_name,
@@ -15,6 +19,7 @@ router.post('/', function(req, res, next) {
         }
         let data = {
           result: results,
+          token: token,
           msg: '登录成功'
         }
         res.send(data)

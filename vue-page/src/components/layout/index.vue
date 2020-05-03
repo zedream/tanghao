@@ -33,14 +33,15 @@
 <script>
 import store from '../../store/modules/layoutNav.js'
 import axios from '../../axios/'
+import { getNickName, getAvatar } from '@/util/auth'
 export default{
   data () {
     return {
       active: store.state.active,
       dropList: false,
       dropListPersonal: false,
-      nickName: sessionStorage.getItem('nick_name'),
-      avatar: sessionStorage.getItem('avatar')
+      nickName: getNickName(),
+      avatar: getAvatar()
     }
   },
   // mounted () {
@@ -82,6 +83,8 @@ export default{
     logout () {
       this.$store.commit('REMOVEUSERNAME')
       this.$store.commit('REMOVENICKNAME')
+      this.$store.commit('REMOVEAVATAR')
+      this.$store.commit('REMOVETOKEN')
     }
   }
 }
@@ -161,6 +164,7 @@ export default{
     user-select: none;
     padding: 0;
     color: #bbbfc4;
+    margin: 0!important;
     &:hover {
       background: #363268;
       color: #bbbfc4;

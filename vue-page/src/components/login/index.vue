@@ -20,7 +20,6 @@
 
 <script>
 import thButton from '../../../component/thButton.vue'
-import axios from '../../axios/'
 
 export default{
   components: { thButton },
@@ -32,20 +31,28 @@ export default{
   },
   methods: {
     login () {
-      axios.post('/api/login', {
+      this.$store.dispatch('loginByUsername', {
         username: this.username,
         password: this.password
+      }).then(() => {
+        this.$router.push(this.$route.query.redirect || '/index')
+      }).catch(err => {
+        console.log(err)
       })
-        .then(res => {
-          this.$store.commit('SETUSERNAME', res.data.result.username)
-          this.$store.commit('SETNICKNAME', res.data.result.nickName)
-          this.$store.commit('SETAVATAR', res.data.result.avatar)
-          this.$router.push(this.$route.query.redirect)
-        })
-        .catch(err => {
-          console.log(err)
-          sessionStorage.removeItem('username')
-        })
+      // axios.post('/api/login', {
+      //   username: this.username,
+      //   password: this.password
+      // })
+      //   .then(res => {
+      //     this.$store.commit('SETUSERNAME', res.data.result.username)
+      //     this.$store.commit('SETNICKNAME', res.data.result.nickName)
+      //     this.$store.commit('SETAVATAR', res.data.result.avatar)
+      //     this.$router.push(this.$route.query.redirect)
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //     sessionStorage.removeItem('username')
+      //   })
     }
   }
 }
