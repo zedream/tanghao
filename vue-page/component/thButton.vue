@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .th-button {
   display: inline-block;
   color: #fff;
@@ -98,12 +98,12 @@ export default {
   color: #ffffff;
   font-size: 1.4rem;
   border-radius: 1.2rem;
-  background: linear-gradient(to right, #54ff61, #15ff1c);
+  background: linear-gradient(to right, #32c53e, #12c917);
 }
 .add-hover {
-  background: linear-gradient(to right, #6dff78, #42ff48);
+  background: linear-gradient(to right, #40d64c, #28d32c);
 }
 .add-active {
-  background: linear-gradient(to right, #17ff29, #00bf06);
+  background: linear-gradient(to right, #2bc538, #0bba10);
 }
 </style>

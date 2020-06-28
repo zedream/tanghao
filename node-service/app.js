@@ -36,14 +36,16 @@ app.use((req, res, next) => {
     let token = req.headers['th-auth'].split(' ')[1]
     let jwt = new Jwt(token)
     let result = jwt.verifyToken()
-    globalData.username = result
+    console.log(result)
     // 如果考验通过就next，否则就返回登陆信息不正确
     if (result === 'err') {
         console.log(result)
         res.status(401).send({msg: '请求未授权，请重新登录'})
         // res.render('login.html')
-    } else {
+    } else if (result === globalData.username) {
       next()
+    } else {
+      res.status(401).send({msg: '登录已过期，请重新登录'})
     }
 } else {
     next()

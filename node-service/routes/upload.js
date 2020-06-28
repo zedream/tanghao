@@ -3,6 +3,7 @@ let router = express.Router()
 let fs = require('fs')
 let formidable = require('formidable')
 let path = require('path')
+let globalData = require('../util/globalData')
 let db = require('../db')
 // 引入七牛模块  
 let qiniu = require("qiniu")
@@ -25,6 +26,7 @@ let config = new qiniu.conf.Config()
 config.zone = qiniu.zone.Zone_z2
 // 图片上传
 router.post('/', function(req, res, next){
+    let username = globalData.username
     let form = new formidable.IncomingForm()
     form.encoding = 'utf-8' // 编码
     form.keepExtensions = true // 保留扩展名
